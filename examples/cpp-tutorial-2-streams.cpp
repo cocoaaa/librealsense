@@ -7,6 +7,7 @@
 
 // First include the librealsense C++ header file
 #include <librealsense/rs.hpp>
+#include <sr300.h>
 #include <cstdio>
 
 // Also include GLFW to allow for graphical display
@@ -14,6 +15,7 @@
 
 int main() try
 {
+    printf("Hi, i'm a newbie");
     // Create a context object. This object owns the handles to all connected realsense devices.
     rs::context ctx;
     printf("There are %d connected RealSense devices.\n", ctx.get_device_count());
@@ -21,10 +23,35 @@ int main() try
 
     // This tutorial will access only a single device, but it is trivial to extend to multiple devices
     rs::device * dev = ctx.get_device(0);
+    // rs::option  min_laser_opt = RS_OPTION_F200_LASER_POWER;
+
     printf("\nUsing device 0, an %s\n", dev->get_name());
     printf("    Serial number: %s\n", dev->get_serial());
     printf("    Firmware version: %s\n", dev->get_firmware_version());
+    // rs::option::sr300_auto_range_min_laseR
+    // rs::option range_opts[2];
+    // range_opts[0]=rs::option::sr300_auto_range_min_laser;
+    // range_opts[1]=rs::option::sr300_auto_range_max_laser;
+    // double range_vals[2];
+    // printf(" Is laser power supported?: %s\n", dev->supports_option(rs::option::f200_laser_power)?"true":"false") ;// ? "true":"false");
+    // printf(" Is power option supported?: %s\n", dev->supports_option(rs::option::sr300_auto_range_min_laser)? "true":"false");
+    // printf("  info about max auto range: %s\n", dev->get_option_description(range_opts[0]));
+    // dev->get_options(range_opts, 2, range_vals);
+    // printf("%f,%f\n: ", range_vals[0], range_vals[1]);
 
+    // //laser power
+    double laser_val[1];
+    rs::option laser_opt[1];
+    laser_opt[0] =rs::option::f200_laser_power;
+    dev->get_options(laser_opt,1,laser_val);
+    printf("before %f\n", laser_val[0]);
+    double after_val[1];
+    after_val[0] = 2;
+    dev->set_options(laser_opt,1,after_val);
+
+    double after[1];
+    dev->get_options(laser_opt,1,after);
+    printf("after %f\n", after[0]);
     // Configure all streams to run at VGA resolution at 60 frames per second
     dev->enable_stream(rs::stream::depth, 640, 480, rs::format::z16, 60);
     dev->enable_stream(rs::stream::color, 640, 480, rs::format::rgb8, 60);
@@ -32,6 +59,19 @@ int main() try
     try { dev->enable_stream(rs::stream::infrared2, 640, 480, rs::format::y8, 60); }
     catch(...) { printf("Device does not provide infrared2 stream.\n"); }
     dev->start();
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Open a GLFW window to display our output
     glfwInit();
