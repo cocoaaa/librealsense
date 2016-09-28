@@ -41,12 +41,12 @@ int main() try
 
     // //laser power
     double laser_val[1];
-    rs::option laser_opt[1];
-    laser_opt[0] =rs::option::f200_laser_power;
+    rs::option laser_opt[] = {rs::option::f200_laser_power};
     dev->get_options(laser_opt,1,laser_val);
-    printf("before %f\n", laser_val[0]);
-    double after_val[1];
-    after_val[0] = 2;
+    printf("before %f\n", laser_val[0]); //16 which is the max
+    
+    //Set f200_laser_power to 1 which is the min
+    double after_val[] = {16};
     dev->set_options(laser_opt,1,after_val);
 
     double after[1];
